@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:surf_practice_magic_ball/screen/view/magic_ball_view.dart';
@@ -38,18 +39,23 @@ class MagicBallScreenState extends State<MagicBallScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: _askMagicBall,
-                  child: MagicBallView(
+                  child: MagicBallView(key: UniqueKey(),
                       state: magicBall.state, reading: magicBall.reading),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16.0, bottom: 80.0),
-                child: Text(
-                  'Press the magic ball or shake your phone',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 108, 105, 140),
-                  ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 80.0),
+                child: AnimatedTextKit(
+                  animatedTexts: [
+                    TyperAnimatedText(
+                      'Press the magic ball or shake your phone',
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 108, 105, 140),
+                      ),
+                    ),
+                  ],
+                  totalRepeatCount: 1,
                 ),
               ),
             ],
@@ -81,6 +87,5 @@ class MagicBallScreenState extends State<MagicBallScreen> {
         magicBall.reading = null;
       });
     }
-
   }
 }

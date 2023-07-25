@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:surf_practice_magic_ball/screen/model/magic_ball.dart';
@@ -25,13 +26,18 @@ class MagicBallView extends StatelessWidget {
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: 50.0),
           constraints: const BoxConstraints.tightFor(height: 644, width: 644),
-          child: Text(
-            (reading != null) ? reading! : '',
-            style: const TextStyle(
-              color: Color.fromARGB(255, 108, 105, 140),
-              fontSize: 24.0,
-              fontWeight: FontWeight.w700,
-            ),
+          child: AnimatedTextKit(
+            animatedTexts: [
+              TypewriterAnimatedText(
+                (reading != null) ? reading! : '',
+                textStyle: const TextStyle(
+                  color: Color.fromARGB(255, 108, 105, 140),
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+            totalRepeatCount: 1,
           ),
         ),
       ],
