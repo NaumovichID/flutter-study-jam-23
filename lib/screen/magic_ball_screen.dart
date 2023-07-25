@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:surf_practice_magic_ball/screen/view/magic_ball_view.dart';
 
+import 'api_constants.dart';
 import 'model/magic_ball.dart';
 
 class MagicBallScreen extends StatefulWidget {
@@ -56,18 +59,28 @@ class MagicBallScreenState extends State<MagicBallScreen> {
     );
   }
 
-  void _askMagicBall() {
-    setState(() {
-      if(magicBall.state == MagicBallState.waiting) {
-        magicBall.state = MagicBallState.reading;
-        magicBall.reading =
-        "I'm concerned that you might not have loved yourself enough today";
-        log('${magicBall.state}');
+  void _askMagicBall() async {
+    try {
+      final response = await http
+          .get(Uri.parse(ApiConstants.baseUrl + ApiConstants.readingEndpoint));
+      if (response.statusCode == 200) {
+        setState(() {
+          magicBall.state = MagicBallState.reading;
+          magicBall.reading = json.decode(response.body)['reading'];
+        });
       } else {
-        magicBall.state = MagicBallState.waiting;
-        magicBall.reading = null;
-        log('${magicBall.state}');
+        setState(() {
+          magicBall.state = MagicBallState.error;
+          magicBall.reading = null;
+        });
       }
-    });
+    } catch (e, stacktrace) {
+      log('$stacktrace');
+      setState(() {
+        magicBall.state = MagicBallState.error;
+        magicBall.reading = null;
+      });
+    }
+
   }
 }
